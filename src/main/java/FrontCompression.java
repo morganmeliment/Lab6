@@ -28,24 +28,122 @@ public class FrontCompression {
     /**
      * Compress a newline-separated list of words using simple front compression.
      *
-     * @param corpus the newline-separated list of words to compress
+     * @param corpus2 the newline-separated list of words to compress
      * @return the input compressed using front encoding
      */
-    public static String compress(final String corpus) {
+    public static String compress(final String corpus2) {
         /*
          * Defend against bad inputs.
          */
-        if (corpus == null) {
+
+
+        if (corpus2 == null) {
             return null;
-        } else if (corpus.length() == 0) {
+        } else if (corpus2.length() == 0) {
             return "";
         }
-
+        String[] corpusy = corpus2.split("\\R");
+        String[] finalComp = new String[corpusy.length];
+        for (int qwerty = 0; qwerty < corpusy.length; qwerty++) {
         /*
          * Complete this function.
          */
+        String corpus = corpusy[qwerty];
+        if (corpus.length() == 0) {
+            System.out.println(corpus + "   12fh4");
+            finalComp[qwerty] = "";
+            continue;
+        }
 
-        return "";
+        String finished = "";
+        int spaces = 0;
+        int[] bin = new int[corpus.length()];
+        int j;
+        for (int t = 0; t < corpus.length(); t++) {
+            if (corpus.charAt(t) == ' ') {
+                spaces++;
+            } else {
+                bin[t] = 1;
+            }
+        }
+        int[] spac = new int[spaces + 1];
+        int len = 0;
+        int yu = 0;
+        for (int t = 0; t < corpus.length(); t++) {
+            if (corpus.charAt(t) == ' ') {
+                spac[yu] = len;
+                yu++;
+                len = 0;
+            } else if (t == corpus.length() - 1) {
+                spac[yu] = len + 1;
+            } else {
+                len++;
+            }
+        }
+        int[][] cars = new int[spaces + 1][];
+        for (int t = 0; t < cars.length; t++) {
+            cars[t] = new int[spac[t]];
+        }
+        int y = 0;
+        int diff = 0;
+        for (int t = 0; t < corpus.length(); t++) {
+            if (corpus.charAt(t) == ' ') {
+                y++;
+                diff = 0;
+            } else {
+                cars[y][diff] = (int) corpus.charAt(t);
+            }
+            diff++;
+        }
+
+        String preFin = "";
+        String byt = "";
+        String temp;
+        for (int t = 0; t < cars.length; t++) {
+            byt = "";
+            //System.out.println(cars[t].length);
+            for (int iu = 0; iu < cars[t].length; iu++) {
+                temp = Integer.toBinaryString(cars[t][iu]);
+                if (temp.length() > 8) {
+                    temp = temp.substring(temp.length() - 8);
+                } else if (temp.length() < 8) {
+                    temp = String.format("%8s", temp).replace(' ', '0');
+                }
+                byt = byt + temp;
+                //System.out.println(byt.length());
+            }
+            preFin = preFin + byt + " ";
+        }
+        //System.out.print(preFin);
+        String[] bytes = preFin.split("\\s+");
+        String you;
+        String preFin2 = "";
+        for (int g = 0; g < bytes.length; g++) {
+            you = "";
+            for (int ui = 0; ui < ((int) ((bytes[g].length() - 1) - ((bytes[g].length() - 1) % 32)) / 32) + 1; ui++) {
+                //System.out.println((bytes[g].length() % 32));
+                if ((ui * 32) + 32 > bytes[g].length()) {
+                    you = you + (char) Integer.parseInt(bytes[g].substring(ui * 32, bytes[g].length()), 2);
+                    //System.out.println(bytes[g].substring(ui * 32, bytes[g].length()));
+                } else {
+                    you = you + (char) Integer.parseInt(bytes[g].substring(ui * 32, (ui * 32) + 32), 2);
+                    //System.out.println(bytes[g].substring(ui * 32, (ui * 32) + 32));
+                }
+                //System.out.println(corpus);
+            }
+            preFin2 = preFin2 + you + "\n";
+        }
+        finalComp[qwerty] = preFin2;
+        }
+        String finalString = "";
+        for (String yui: finalComp) {
+            finalString += yui;
+        }
+        //System.out.println(finalString);
+        /*System.out.println("Original length: " + corpus2.length());
+        System.out.println("Compressed length: " + finalString.length());
+        System.out.println(((float) finalString.length()) / corpus2.length());*/
+        return finalString;
     }
 
     /**
@@ -63,12 +161,38 @@ public class FrontCompression {
         } else if (corpus.length() == 0) {
             return "";
         }
+        String[] corpusy = corpus.split("\\R");
+        String[] finalComp = new String[corpusy.length];
+        for (int qwerty = 0; qwerty < corpusy.length; qwerty++) {
+            String you = "";
+            String preFin2 = "";
+            for (int g = 0; g < corpusy[qwerty].length(); g++) {
+                you += String.format("%32s", Integer.toBinaryString(corpusy[qwerty].charAt(g))).replace(' ', '0');
+            }
+            int gu = 8;
+            for (int ui = 0; ui < ((int) ((you.length() - 1) - ((you.length() - 1) % gu)) / gu) + 1; ui++) {
+                if ((ui * gu) + gu > you.length()) {
+                    preFin2 = preFin2 + (char) Integer.parseInt(you.substring(ui * gu, you.length()), 2);
+                    //System.out.println(bytes[g].substring(ui * 32, bytes[g].length()));
+                } else {
+                    preFin2 = preFin2 + (char) Integer.parseInt(you.substring(ui * gu, (ui * gu) + gu), 2);
+                    //System.out.println(bytes[g].substring(ui * 32, (ui * 32) + 32));
+                }
+            }
+            finalComp[qwerty] = preFin2;
+        }
+        String finalString = "";
+        for (String yui: finalComp) {
+            finalString += yui + "\n";
+            //System.out.println(yui);
+        }
+        //System.out.println(finalString);
 
         /*
          * Complete this function.
          */
 
-        return "";
+        return finalString;
     }
 
     /**
